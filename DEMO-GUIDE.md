@@ -1,43 +1,36 @@
-# Fit Vision AI: SIH presentation guide
+# Getting started
 
-Use the exact project title: **AI-Driven Exercise Performance and Form Intelligence System**. Team: **Fit Vision AI**.
+## AI-Driven Exercise Performance and Form Intelligence System
 
-## Three-minute walkthrough
+Run **Start Exercise Intelligence.cmd**, then open http://127.0.0.1:4173 in Chrome or Edge. Keep the launcher window open while using the application.
 
-**0:00–0:25 — Problem and idea.** “Many students exercise independently without immediate feedback or a simple record of progress. Fit Vision AI uses a laptop webcam to turn body movement into understandable exercise feedback.”
+## Start a workout
 
-**0:25–0:45 — Scope.** “Our prototype supports squats, bicep curls and push-ups. It combines a pretrained pose model with our exercise-specific rules. Atlas gives spoken guidance and we save workout summaries.”
+1. Select Squats, Bicep curls, or Push-ups and set a repetition target.
+2. Choose Enable camera and allow camera access.
+3. Position yourself side-on with the required joints visible. Start in the extended position.
+4. Complete the movement and return to the starting position. The counter records full cycles.
+5. Enable Voice for Atlas spoken feedback if desired.
+6. Choose Finish session to save the workout. Open Workout history to review or export your sessions.
 
-**0:45–1:40 — Live demonstration.** Select Bicep curls, set a target of 3, and enable the camera. Stand side-on with shoulder, elbow and wrist visible. Start with the arm extended, curl fully, and extend again. Show the angle, state transition and rep count. Try a partial movement to explain why a full cycle is required. If appropriate, enable Atlas Voice. The app does not need microphone access.
+## Squat tracking
 
-**Backup:** Select “Try the guided demo.” Say: “These are simulated landmarks demonstrating the same rule engine; they are not a live camera prediction.”
+Keep your hips, knees and ankles visible. The counter looks for a knee angle below 115 degrees followed by a return above 150 degrees. Atlas shows which movement it is waiting for. Do not force a painful movement to meet the thresholds.
 
-**1:40–2:10 — Progress.** Finish the session and open Workout history. Show the recorded exercise, repetition target, duration and live/demo source. CSV export produces an actual downloadable report.
+## Camera troubleshooting
 
-**2:10–2:40 — Explainable design.** “MediaPipe predicts pose landmarks. We calculate joint angles and pass them to a state machine. A rep needs a stable extended position, a bent position and a return. Low-confidence landmarks reset the incomplete cycle. Speech feedback has a cooldown.”
+Allow Camera in the browser's site controls, then reload. On Windows, check Settings > Privacy & security > Camera and desktop-app camera access. Close other applications using the camera if the device is busy.
 
-**2:40–3:00 — Next steps.** “We plan to validate thresholds with varied users, add automatic exercise recognition, and connect Atlas to an LLM. This prototype uses local browser storage. Our PPT proposes a Python and SQLite implementation for the next phase.”
+Improve lighting and keep the required joints inside the frame when confidence is low. Brief tracking flicker pauses counting; sustained tracking loss resets the incomplete cycle.
 
-## Questions judges may ask
+## Guided demo
 
-**Did you train the AI model?** No. We use Google's pretrained MediaPipe pose model. Our work is the exercise rule engine, feedback workflow and prototype integration.
+Choose Try the guided demo to explore without a webcam. It uses synthetic landmarks with the same repetition rules. History labels simulated sessions separately from live workouts.
 
-**What differs from the reference?** The repository supplied the initial concept. Our interface, modular rule engine, labelled fallback simulation, visibility handling and presentation workflow were implemented independently. Do not claim worldwide novelty without broader research.
+## Data and capabilities
 
-**Is Atlas an LLM now?** No. This version uses context from the active exercise and movement rules with browser speech synthesis. LLM integration is planned.
+Camera frames are processed locally and are not recorded or uploaded by the application. Workout summaries are stored in this browser. Export CSV to keep a copy.
 
-**Why does the code differ from the PPT stack?** We prioritized a portable browser prototype for demonstration. The pose-and-rules architecture remains consistent; the PPT's Python, OpenCV, Streamlit and SQLite implementation is a next-stage option.
+Atlas uses exercise rules and browser speech synthesis. LLM conversations and automatic exercise recognition are planned. MediaPipe supplies the pretrained pose model. Landmark confidence is not a measure of exercise accuracy, and the application does not assess injuries.
 
-**What is the accuracy?** We have verified state-machine behavior with automated tests, but have not run a representative real-person accuracy benchmark. We cannot claim an accuracy percentage. The interface's confidence number describes landmark visibility.
-
-**Does it prevent injury?** We do not claim that. It provides basic movement feedback; it is not a trainer replacement or a medical assessment.
-
-**Where does video go?** Frames are processed on the device by browser-based MediaPipe. The app does not upload or record video. Session metrics are stored in this browser only.
-
-## Before leaving for the event
-
-1. Run the launcher on the presentation laptop and rehearse in Chrome or Edge.
-2. Check camera permissions, framing and room lighting with three real repetitions.
-3. Select an installed male voice and confirm speakers work; leave voice off if it interrupts your explanation.
-4. Keep the entire project folder, including `dist/vendor`, on the laptop and a USB backup. Copying only the HTML file will not work.
-5. Use the local launcher for a presentation without network dependence. Hosted access is private to the owner by default.
+The pose runtime and model are included locally. Optional web fonts use system fallbacks offline. Voice availability depends on the browser and installed voices.

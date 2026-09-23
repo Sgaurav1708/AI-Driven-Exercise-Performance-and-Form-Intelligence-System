@@ -3,3 +3,6 @@
 *.tar.gz
 node_modules/
 qa/
+
+tmp/
+output/
