@@ -8,6 +8,10 @@
 ![PWA](https://img.shields.io/badge/Offline-PWA-informational)
 ![Netlify](https://img.shields.io/badge/Deployment-Netlify-informational)
 
+### 🚀 [Open Live Demo](https://ai-exercise-intelligence.netlify.app)
+
+Try the deployed application directly in your browser. For live pose tracking, allow camera access when prompted.
+
 ## Overview
 
 This project turns a webcam-enabled browser into an exercise assistant. It uses Google's pretrained **MediaPipe Pose Landmarker** to detect body landmarks locally and an exercise-specific rule engine to interpret joint geometry, movement phases and valid holds.
