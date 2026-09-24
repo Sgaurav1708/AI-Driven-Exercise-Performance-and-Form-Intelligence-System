@@ -1,10 +1,11 @@
 @echo off
 cd /d "%~dp0"
-start "" "http://127.0.0.1:4173"
 where node >nul 2>nul
-if %errorlevel% equ 0 (
-  node server.mjs
-) else (
-  "C:\Users\Gaurav Kumar\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe" server.mjs
+if errorlevel 1 (
+  echo Install Node.js 20 or newer, then run this launcher again.
+  pause
+  exit /b 1
 )
+start "" "http://127.0.0.1:4173"
+node server.mjs
 pause

@@ -1,0 +1,12 @@
+import {createRequire} from 'node:module';
+import assert from 'node:assert/strict';
+const require=createRequire(import.meta.url),{chromium}=require('C:/Users/Gaurav Kumar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const browser=await chromium.launch({headless:true,channel:'msedge'}),page=await browser.newPage();let errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://127.0.0.1:4173');
+for(const key of ['squat','plank']){
+ await page.locator(`[data-exercise=${key}]`).click();await page.locator('#sets').fill('2');await page.locator('#sets').dispatchEvent('change');await page.locator('#target').fill('1');await page.locator('#target').dispatchEvent('change');await page.locator('#start-demo').click();assert.ok(await page.locator('#sets').isDisabled());
+ await page.locator('#next-set').waitFor({state:'visible',timeout:10000});assert.equal(await page.locator('#reps').innerText(),'1');await page.waitForTimeout(600);assert.equal(await page.locator('#reps').innerText(),'1');await page.locator('#next-set').click();assert.equal(await page.locator('#reps').innerText(),'0');await page.waitForFunction(()=>document.querySelector('#set-progress').textContent==='All 2 sets complete');await page.locator('#finish').click();
+ const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('fitvision.sessions.v1'))[0]);assert.equal(saved.setsCompleted,2);assert.equal(saved.setsTarget,2);assert.deepEqual(saved.setResults,[1,1]);assert.equal(key==='plank'?saved.holdSeconds:saved.reps,2);console.log(key,'two sets passed');
+}
+await page.locator('[data-exercise=squat]').click();await page.locator('#start-demo').click();await page.locator('#finish').click();const partial=await page.evaluate(()=>JSON.parse(localStorage.getItem('fitvision.sessions.v1'))[0]);assert.equal(partial.setsCompleted,0);assert.equal(partial.reps,0);
+await page.reload();await page.locator('[data-view=history]').click();assert.equal(await page.locator('#history-body tr').count(),3);assert.ok((await page.locator('#history-body').innerText()).includes('2 / 2'));
+assert.deepEqual(errors,[]);await page.locator('[data-view=coach]').click();await page.setViewportSize({width:390,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:'qa/sets-mobile.png',fullPage:true});await browser.close();console.log('Partial finish, reload, history and mobile passed');

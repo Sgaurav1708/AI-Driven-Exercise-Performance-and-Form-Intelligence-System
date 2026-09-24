@@ -7,3 +7,22 @@ test('single-frame spikes cannot count reps',()=>{const c=new RepCounter('squat'
 for(const fps of [15,30,60])test(`continuous squats count at ${fps} fps without holding endpoints`,()=>{const c=new RepCounter('squat');const dt=1000/fps;for(let t=0;t<=6800;t+=dt){const a=155-48*(1-Math.cos(2*Math.PI*t/2200))/2;c.update(a,.9,t);}assert.equal(c.reps,3);});
 test('brief confidence flicker preserves a squat, sustained loss invalidates it',()=>{const c=new RepCounter('squat');let t=0;const hold=(a,confidence,frames)=>{for(let i=0;i<frames;i++)c.update(a,confidence,t+=40);};hold(155,.9,20);hold(108,.9,20);hold(108,.1,3);assert.equal(c.reps,0);hold(108,.9,8);hold(155,.9,20);assert.equal(c.reps,1);hold(108,.9,20);hold(108,.1,15);hold(155,.9,20);assert.equal(c.reps,1);});
 test('a long gap with no frames invalidates the partial cycle',()=>{const c=new RepCounter('squat');for(let t=0;t<1000;t+=40)c.update(155,.9,t);for(let t=1000;t<2000;t+=40)c.update(108,.9,t);for(let t=4000;t<5000;t+=40)c.update(155,.9,t);assert.equal(c.reps,0);});
+import {HoldCounter,poseMeasurement,EXERCISES} from '../dist/engine.js';
+import {guidePose} from '../dist/guides.js';
+for(const key of ['press','pullup'])test(key+' counts complete cycles and rejects curls',()=>{
+ const c=new RepCounter(key);for(let t=0;t<13000;t+=40){const m=poseMeasurement(key,guidePose(key,t),960,600);c.update(m.deg,m.conf,t);}assert.equal(c.reps,3);
+ assert.equal(poseMeasurement(key,guidePose('curl',2000),960,600).conf,0);
+});
+test('plank only accrues visible aligned horizontal holds, excludes gaps',()=>{
+ const c=new HoldCounter();for(let t=0;t<=1000;t+=40)c.update(175,.9,t);assert.ok(Math.abs(c.seconds-1)<.001);
+ c.update(140,.9,1040);c.update(175,.9,1080);assert.ok(Math.abs(c.seconds-1)<.001);
+ c.update(175,0,1120);c.update(175,.9,1160);c.update(175,.9,3000);assert.ok(Math.abs(c.seconds-1)<.001);
+ c.resetCycle();c.update(175,.9,3040);assert.ok(Math.abs(c.seconds-1)<.001);
+ const standing=guidePose('curl',0);assert.equal(poseMeasurement('plank',standing,960,600).deg,0);
+ assert.ok(poseMeasurement('plank',guidePose('plank',0),960,600).deg>=160);
+});
+for(const key of ['squat','curl','pushup'])test(key+' bundled guide drives real counting rules',()=>{const c=new RepCounter(key);for(let t=0;t<13000;t+=40){const m=poseMeasurement(key,guidePose(key,t),960,600);c.update(m.deg,m.conf,t);}assert.equal(c.reps,3);});
+import {ReadinessGate,RestTimer,weeklyProgress} from '../dist/training.js';
+test('readiness requires continuous visibility and restarts on frame gaps',()=>{const gate=new ReadinessGate();for(let t=0;t<1400;t+=100)assert.equal(gate.update(true,t),false);assert.equal(gate.update(false,1400),false);for(let t=1500;t<3000;t+=100)assert.equal(gate.update(true,t),false);assert.equal(gate.update(true,3000),true);gate.reset();gate.update(true,0);assert.equal(gate.update(true,2000),false);});
+test('rest timer uses elapsed wall time and can be cleared',()=>{const timer=new RestTimer();timer.start(30,1000);assert.equal(timer.remaining(2000),29);assert.equal(timer.remaining(40000),0);timer.clear();assert.equal(timer.remaining(0),0);});
+test('weekly progress excludes demos, future and old sessions, includes legacy sets',()=>{const now=new Date(2026,8,24,12);const stats=weeklyProgress([{date:new Date(2026,8,24,10).toISOString(),source:'camera',exercise:'squat',reps:10,target:10},{date:new Date(2026,8,23,10).toISOString(),source:'camera',exercise:'plank',reps:0,holdSeconds:40,setsCompleted:2},{date:new Date(2026,8,24,10).toISOString(),source:'demo',reps:100},{date:new Date(2026,8,1).toISOString(),source:'camera',reps:100},{date:new Date(2026,8,25).toISOString(),source:'camera',reps:100}],now);assert.equal(stats.sessions,2);assert.equal(stats.sets,3);assert.equal(stats.reps,10);assert.equal(stats.holds,40);assert.equal(stats.days.reduce((n,d)=>n+d.sessions,0),2);});

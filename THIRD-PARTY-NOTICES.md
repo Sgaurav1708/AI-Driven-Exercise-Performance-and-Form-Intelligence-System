@@ -4,6 +4,6 @@ This prototype bundles Google MediaPipe Tasks Vision `0.10.22-rc.20250304` and t
 
 Upstream project: https://github.com/google-ai-edge/mediapipe
 
-Optional web fonts: DM Sans and Manrope, served by Google Fonts. Their respective projects use the SIL Open Font License. They are not bundled and system fonts work offline.
+Typography uses device system fonts; no remote fonts are loaded.
 
 The user provided https://github.com/shradha-khapra/ai-gym-coach as concept inspiration. No source files, artwork or model files from that repository are included in this prototype.

@@ -1,36 +1,15 @@
 # Getting started
 
-## AI-Driven Exercise Performance and Form Intelligence System
+1. Run `npm start` or double-click `Start Exercise Intelligence.cmd`.
+2. Open http://127.0.0.1:4173 in Chrome or Edge.
+3. Select an exercise, play its movement guide and read the form tips.
+4. Set the number of sets and a rep target per set, or a seconds target per set for plank.
+5. Choose Enable camera and allow access. Follow the exercise-specific camera setup and hold the starting position until the readiness check completes.
+6. Choose a coach voice, preview it and adjust speed/pitch. Turn on Voice for spoken cues.
+7. Choose a rest duration before starting. After each set, the rest timer counts down; choose Start next set when ready, or skip the remaining rest. Finish the session after your final set, or finish early to save partial progress. Workout history includes a seven-day progress summary and CSV export.
 
-Run **Start Exercise Intelligence.cmd**, then open http://127.0.0.1:4173 in Chrome or Edge. Keep the launcher window open while using the application.
+For a camera-free walkthrough, choose Try the guided demo. These sessions use simulated landmarks and are labelled in history.
 
-## Start a workout
+For offline use, click Download for offline while online and wait until Offline pack ready appears. Keep using the same browser and address. Select an offline voice. A new device must download the pack first. The local server also works without internet.
 
-1. Select Squats, Bicep curls, or Push-ups and set a repetition target.
-2. Choose Enable camera and allow camera access.
-3. Position yourself side-on with the required joints visible. Start in the extended position.
-4. Complete the movement and return to the starting position. The counter records full cycles.
-5. Enable Voice for Atlas spoken feedback if desired.
-6. Choose Finish session to save the workout. Open Workout history to review or export your sessions.
-
-## Squat tracking
-
-Keep your hips, knees and ankles visible. The counter looks for a knee angle below 115 degrees followed by a return above 150 degrees. Atlas shows which movement it is waiting for. Do not force a painful movement to meet the thresholds.
-
-## Camera troubleshooting
-
-Allow Camera in the browser's site controls, then reload. On Windows, check Settings > Privacy & security > Camera and desktop-app camera access. Close other applications using the camera if the device is busy.
-
-Improve lighting and keep the required joints inside the frame when confidence is low. Brief tracking flicker pauses counting; sustained tracking loss resets the incomplete cycle.
-
-## Guided demo
-
-Choose Try the guided demo to explore without a webcam. It uses synthetic landmarks with the same repetition rules. History labels simulated sessions separately from live workouts.
-
-## Data and capabilities
-
-Camera frames are processed locally and are not recorded or uploaded by the application. Workout summaries are stored in this browser. Export CSV to keep a copy.
-
-Atlas uses exercise rules and browser speech synthesis. LLM conversations and automatic exercise recognition are planned. MediaPipe supplies the pretrained pose model. Landmark confidence is not a measure of exercise accuracy, and the application does not assess injuries.
-
-The pose runtime and model are included locally. Optional web fonts use system fallbacks offline. Voice availability depends on the browser and installed voices.
+If the camera fails, allow access in browser site settings. Close other camera applications, check operating-system camera permissions and try Chrome or Edge. Keep required joints visible with good lighting. Stop movements that cause pain.

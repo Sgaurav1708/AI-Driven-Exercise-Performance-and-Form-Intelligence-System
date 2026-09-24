@@ -1,8 +1,32 @@
-.sites-runtime/
-*.zip
-*.tar.gz
 node_modules/
-qa/
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vscode/
+# Dependencies
+node_modules/
 
-tmp/
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Runtime / generated files
+.sites-runtime/
 output/
+tmp/
+
+# Archive files
+*.zip
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db

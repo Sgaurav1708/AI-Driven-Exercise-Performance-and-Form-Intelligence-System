@@ -1,0 +1,6 @@
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url),{chromium}=require('C:/Users/Gaurav Kumar/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const browser=await chromium.launch({headless:true,channel:'msedge',args:['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']});const page=await browser.newPage();await page.goto('http://127.0.0.1:4173');await page.locator('#start-camera').click();await page.waitForFunction(()=>document.querySelector('#camera-status').textContent==='LIVE CAMERA',{},{timeout:30000});await page.waitForTimeout(1000);console.log('Camera pipeline:',await page.locator('#tracking-status').innerText());await page.locator('#finish').click();console.log('Stopped tracks:',await page.locator('#video').evaluate(v=>v.srcObject===null));
+await page.locator('#voice-rate').fill('1.2');await page.locator('#voice-rate').dispatchEvent('change');await page.reload();console.log('Saved voice rate:',await page.locator('#voice-rate').inputValue());
+const text=await page.locator('body').innerText();if(/chatgpt|codex|fit vision/i.test(text)||text.includes('\ufffd'))throw Error('Unexpected branding or encoding');
+console.log('Branding and encoding passed');await browser.close();
