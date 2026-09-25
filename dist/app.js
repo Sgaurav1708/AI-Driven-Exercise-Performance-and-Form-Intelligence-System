@@ -16,6 +16,28 @@ try{history=JSON.parse(localStorage.getItem('fitvision.sessions.v1')||'[]');if(!
 
 const connections=[[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24],[23,25],[25,27],[24,26],[26,28],[27,31],[28,32]];
 
+const PROFILE_KEY='exercise.profile.v1';
+function loadProfile(){try{return JSON.parse(localStorage.getItem(PROFILE_KEY)||'null');}catch{return null;}}
+function renderProfile(profile){
+  $('profile-gate').hidden=!!profile;
+  $('profile-welcome').textContent=profile?`Hi, ${profile.name}`:'';
+  $('profile-logout').hidden=!profile;
+}
+renderProfile(loadProfile());
+$('profile-form').onsubmit=e=>{
+  e.preventDefault();
+  const name=$('profile-name').value.trim(),email=$('profile-email').value.trim();
+  if(!name)return;
+  localStorage.setItem(PROFILE_KEY,JSON.stringify({name,email}));
+  renderProfile({name,email});
+  toast(`Welcome, ${name}.`);
+};
+$('profile-logout').onclick=()=>{
+  localStorage.removeItem(PROFILE_KEY);
+  $('profile-name').value='';$('profile-email').value='';
+  renderProfile(null);
+};
+
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').hidden=true,5000);}
 
 function feedback(message,read=false){if($('feedback').textContent!==message)$('feedback').textContent=message;if(read)speak(message);}
